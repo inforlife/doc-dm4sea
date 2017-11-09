@@ -1,0 +1,6 @@
+dm4sea:
+  build:
+    image: inforlife/dm4sea:ci
+    dockerfile: Dockerfile.ci
+  encrypted_env_file: env.ci.encrypted
+  cached: true

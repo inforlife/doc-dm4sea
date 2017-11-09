@@ -1,0 +1,5 @@
+- type: serial
+  steps:
+  - name: rspec
+    service: dm4sea
+    command: bin/rspec spec

@@ -1,0 +1,20 @@
+engines:
+  reek:
+    enabled: true
+  rubocop:
+    enabled: true
+    #checks:
+    # Rubocop/Metrics/ClassLength:
+    #   enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+        #mass_threshold: 30
+    exclude_paths:
+      - spec/**/*
+ratings:
+  paths:
+  - app/**
+  - "**.rb"

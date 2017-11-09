@@ -1,0 +1,30 @@
+FROM alpine:3.5
+
+MAINTAINER The Software Development Team at InfoRLife SA <dev@inforlife.ch>
+
+ENV TIMEZONE Europe/Rome
+ENV RUBY_VERSION 2.4.2
+ENV BUNDLER_VERSION 1.16.0
+ENV APP_ROOT /dm4sea
+ENV APP_ENVIRONMENT ci
+ENV PATH /usr/local/ruby/bin:$PATH
+
+RUN apk update && \
+    apk upgrade && \
+    apk --no-cache add tzdata git bash wget yaml openssl-dev readline-dev build-base linux-headers && \
+    ls /usr/share/zoneinfo && \
+    cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime && \
+    echo $TIMEZONE >  /etc/timezone && \
+    apk del tzdata && \
+    rm -rf /var/cache/apk/* && \
+    git clone https://github.com/sstephenson/ruby-build.git && \
+    cd ruby-build && \
+    ./install.sh && \
+    ruby-build $RUBY_VERSION /usr/local/ruby-$RUBY_VERSION && \
+    ln -s /usr/local/ruby-$RUBY_VERSION/ /usr/local/ruby
+
+WORKDIR $APP_ROOT
+COPY . $APP_ROOT
+
+RUN gem install bundler -v $BUNDLER_VERSION --no-ri --no-rdoc && \
+    bundle install --jobs 20 --retry 5 --without development test

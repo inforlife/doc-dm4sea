@@ -11,7 +11,7 @@ ENV PATH /usr/local/ruby/bin:$PATH
 
 RUN apk update && \
     apk upgrade && \
-    apk --no-cache add tzdata git bash wget yaml openssl-dev readline-dev build-base linux-headers && \
+    apk --no-cache add tzdata git bash wget yaml openssl-dev readline-dev build-base linux-headers sqlite sqlite-libs sqlite-dev && \
     ls /usr/share/zoneinfo && \
     cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime && \
     echo $TIMEZONE >  /etc/timezone && \

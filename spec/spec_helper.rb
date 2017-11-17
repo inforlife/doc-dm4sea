@@ -1,4 +1,4 @@
-ENV['APP_ENVIRONMENT'] = 'test'
+ENV['APP_ENVIRONMENT'] ||= 'test'
 
 require_relative '../config/application.rb'
 #

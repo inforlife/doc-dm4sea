@@ -28,3 +28,5 @@ COPY . $APP_ROOT
 
 RUN gem install bundler -v $BUNDLER_VERSION --no-ri --no-rdoc && \
     bundle install --jobs 20 --retry 5 --without development test
+
+RUN chmod -R +x bin

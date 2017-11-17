@@ -1,4 +1,5 @@
 require 'bundler'
+require 'open3'
 
 class App
   def self.name
@@ -15,9 +16,6 @@ class App
 end
 
 Bundler.require(:default, App.env)
-Dotenv.load("#{App.root}/.env")
-
-require 'open3'
 
 require_relative "environments/#{App.env}"
 require_relative "../app/listen_to_file_modification"

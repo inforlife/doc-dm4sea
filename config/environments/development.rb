@@ -1,3 +1,5 @@
+Dotenv.load("#{App.root}/.env")
+
 Mail.defaults do
   delivery_method :smtp, {  address:        ENV['SMTP_ADDRESS'],
                             port:           587,

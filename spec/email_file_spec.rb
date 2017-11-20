@@ -1,4 +1,4 @@
-RSpec.describe 'EmailFile' do
+RSpec.describe EmailFile do
   before do
     Mail::TestMailer.deliveries.clear
   end

@@ -1,4 +1,4 @@
-RSpec.describe 'EmailDataMatrix' do
+RSpec.describe EmailDataMatrix do
   context '::after_batch_record_print' do
     let(:cgmp_table_class)                  { class_spy('CGMPRecord').as_stubbed_const }
     let(:new_production_order_check_class)  { class_spy('NewProductionOrderCheck').as_stubbed_const }

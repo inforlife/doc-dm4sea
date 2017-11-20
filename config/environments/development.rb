@@ -8,3 +8,9 @@ Mail.defaults do
                             password:       ENV['SMTP_PASSWORD'],
                             authentication: 'login' }
 end
+
+class Rollbar
+  def self.error(error)
+    puts error
+  end
+end

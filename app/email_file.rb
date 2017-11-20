@@ -1,4 +1,6 @@
 class EmailFile
+  attr_reader :file_path
+
   def initialize(file)
     @file_path = file.file_path
   end

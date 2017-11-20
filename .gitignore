@@ -5,3 +5,6 @@ codeship.aes
 db/*.db
 images/*png
 pdfs/*.pdf
+log/*.log
+
+RELEASE

@@ -34,6 +34,9 @@ RSpec.describe EmailDataMatrix do
       end
 
       context 'and a batch record has been printed for a batch which previously did not have the batch record printed' do
+        let(:log_action_class)      { class_spy('LogAction').as_stubbed_const }
+        let(:log_action)            { spy('email file') }
+
         let(:email_file_class)      { class_spy('EmailFile').as_stubbed_const }
         let(:email_file)            { spy('email file') }
         let(:data_matrix_pdf_class) { class_spy('DataMatrixPdf').as_stubbed_const }
@@ -59,6 +62,13 @@ RSpec.describe EmailDataMatrix do
 
           EmailDataMatrix.after_batch_record_print
           expect(email_file).to have_received(:deliver)
+        end
+
+        it 'logs the email send' do
+          allow(log_action_class).to receive(:new) { log_action }
+
+          EmailDataMatrix.after_batch_record_print
+          expect(log_action).to have_received(:deliver)
         end
 
         it 'updates the batch setting fdl to true' do

@@ -8,7 +8,7 @@ class EmailDataMatrix
       DatabaseRecord.where(fdl: false).each do |record|
         # CGMPRecord.new('LOTTI').first(batch: record.code) MAY RETURN NIL IF RECORD DELATED IN CGMP
         if CGMPRecord.new('LOTTI').first(batch: record.code).prt_fdl
-          EmailFile.new(DataMatrixPdf.new(VariableData.new(last_batch)).save).deliver
+          LogAction.new(EmailFile.new(DataMatrixPdf.new(VariableData.new(last_batch)).save)).deliver
           record.update(fdl: true)
           break
         end

@@ -29,3 +29,6 @@ require_relative "../app/data_matrix_pdf"
 require_relative "../app/data_matrix_prawn_view"
 require_relative "../app/email_file"
 require_relative "../app/error_handler"
+require_relative "../app/log_action"
+
+LOGGER = Logger.new("#{App.root}/log/#{App.env}.log")

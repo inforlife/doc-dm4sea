@@ -11,5 +11,6 @@ class DataMatrixPdf
     @pdf.human_readible(@variable_data)
     @pdf.datamatrix(@variable_data)
     @pdf.save_as(@file_path)
+    self
   end
 end

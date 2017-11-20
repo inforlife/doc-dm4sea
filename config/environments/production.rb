@@ -6,3 +6,7 @@ Mail.defaults do
                             password:       ENV['SMTP_PASSWORD'],
                             authentication: 'login' }
 end
+
+Rollbar.configure do |config|
+  config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
+end

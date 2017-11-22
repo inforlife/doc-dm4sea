@@ -18,7 +18,11 @@ class VariableData
 private
 
   def get_sellable_units(cgmp_batch)
+    (standard_sellable_units(cgmp_batch) * cgmp_batch.qt_teorica).ceil
+  end
+
+  def standard_sellable_units(cgmp_batch)
     formula = CGMPRecord.new('LEGAMI').where(codeprod: cgmp_batch.codeprod, metodopro: cgmp_batch.metodopro)
-    Integer(formula.select { |item| /\A43-\w+\Z/ =~ item.codice_mp }.max_by(&:legame).legame)
+    formula.select { |item| /\A43-\w+\Z/ =~ item.codice_mp }.max_by(&:legame).legame
   end
 end

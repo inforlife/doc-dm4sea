@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 MAINTAINER The Software Development Team at InfoRLife SA <dev@inforlife.ch>
 

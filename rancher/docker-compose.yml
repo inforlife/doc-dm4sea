@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  dm4sea:
+    image: inforlife/dm4sea
+    volumes:
+      - /media/acsweb/cgmp/current:/cgmp
+      - /usr/dm4sea/db:/dm4sea/db
+      - /usr/dm4sea/pdfs:/dm4sea/pdfs
+    environment:
+      CGMP_PATH:      /cgmp
+      SMTP_ADDRESS:   smtp.mailgun.org
+      SMTP_DOMAIN:    infor.life
+      SMTP_USERNAME:  dm4sea@infor.life
+      SMTP_PASSWORD:  !]9b?.wPag<PC]"u
+      RECIPIENTS:     sara.sottovia@inforlife.ch&alessandro.bonamigo@inforlife.ch
+      ROLLBAR_ACCESS_TOKEN: ccffe38790e54f3daf60aace7f8f2f45

@@ -1,2 +1,10 @@
 codeship.aes
 .env.ci
+.env
+
+db/*.db
+images/*png
+pdfs/*.pdf
+log/*.log
+
+RELEASE

@@ -38,7 +38,7 @@ namespace :db do
    end
 
    desc 'Delete database content'
-   # bundle exec rake db:delete['test']
+   # bundle exec rake db:purge['test']
    task :purge, [:env] do |t, args|
      require 'sqlite3'
 
@@ -54,5 +54,18 @@ namespace :db do
      SQL
 
     puts "Database #{database_name} purged"
+  end
+end
+
+namespace :datamatrix do
+  desc 'Generate and email datamatrix on demand'
+  # bundle exec rake datamatrix:send['LOT01']
+  task :send, [:batch_code] do |t, args|
+    require_relative 'config/application'
+
+    batch_code = args[:batch_code]
+    EmailDataMatrix.for_batch(batch_code)
+
+    puts "Datamatrix for #{batch_code} generated and emailed"
   end
 end

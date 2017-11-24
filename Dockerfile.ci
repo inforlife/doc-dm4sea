@@ -11,12 +11,14 @@ ENV PATH /usr/local/ruby/bin:$PATH
 
 RUN apk update && \
     apk upgrade && \
-    apk --no-cache add tzdata git bash wget yaml openssl-dev readline-dev build-base linux-headers sqlite sqlite-libs sqlite-dev && \
+    apk --no-cache add curl tzdata git bash wget yaml openssl-dev readline-dev build-base linux-headers sqlite sqlite-libs sqlite-dev && \
     ls /usr/share/zoneinfo && \
     cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime && \
     echo $TIMEZONE >  /etc/timezone && \
     apk del tzdata && \
     rm -rf /var/cache/apk/* && \
+    curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /usr/local/bin/cc-test-reporter && \
+    chmod +x /usr/local/bin/cc-test-reporter && \
     git clone https://github.com/sstephenson/ruby-build.git && \
     cd ruby-build && \
     ./install.sh && \
@@ -28,5 +30,7 @@ COPY . $APP_ROOT
 
 RUN gem install bundler -v $BUNDLER_VERSION --no-ri --no-rdoc && \
     bundle install --jobs 20 --retry 5 --without development test
+
+RUN mkdir coverage
 
 RUN chmod -R +x bin

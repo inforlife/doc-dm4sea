@@ -8,3 +8,5 @@ pdfs/*.pdf
 log/*.log
 
 RELEASE
+
+coverage

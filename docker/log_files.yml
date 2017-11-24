@@ -1,0 +1,7 @@
+hostname: dm4sea-production
+files:
+  - /dm4sea/log/production.log
+destination:
+  host: logs6.papertrailapp.com
+  port: 33029
+  protocol: tls

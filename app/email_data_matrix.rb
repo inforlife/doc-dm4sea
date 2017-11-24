@@ -8,11 +8,25 @@ class EmailDataMatrix
       DatabaseRecord.where(fdl: false).each do |record|
         # CGMPRecord.new('LOTTI').first(batch: record.code) MAY RETURN NIL IF RECORD DELATED IN CGMP
         if CGMPRecord.new('LOTTI').first(batch: record.code).prt_fdl
-          LogAction.new(EmailFile.new(DataMatrixPdf.new(VariableData.new(last_batch)).save)).deliver
+          generate_and_email_datamatrix_for(last_batch)
           record.update(fdl: true)
           break
         end
       end
     end
+  end
+
+  def self.for_batch(batch_code)
+    batch = CGMPRecord.new('LOTTI').first(batch: batch_code)
+    generate_and_email_datamatrix_for(batch)
+
+    record = DatabaseRecord.where(batch: batch_code).first
+    record.update(fdl: true)
+  end
+
+private
+
+  def self.generate_and_email_datamatrix_for(batch)
+    LogAction.new(EmailFile.new(DataMatrixPdf.new(VariableData.new(batch)).save)).deliver
   end
 end

@@ -20,3 +20,7 @@ end
 group :development, :test, :ci do
   gem 'rspec',   '3.7'
 end
+
+group :ci do
+  gem 'simplecov', '~> 0.15.0', require: false
+end

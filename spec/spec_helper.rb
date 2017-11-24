@@ -1,7 +1,11 @@
 ENV['APP_ENVIRONMENT'] ||= 'test'
 
+if ENV['APP_ENVIRONMENT'] == 'ci'
+  require 'simplecov'
+end
+
 require_relative '../config/application.rb'
-#
+
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

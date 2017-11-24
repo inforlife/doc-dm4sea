@@ -1,5 +1,11 @@
 - type: serial
   steps:
+  - name: codeclimate_pre
+    service: dm4sea
+    command: cc-test-reporter before-build
   - name: rspec
     service: dm4sea
     command: bin/ci
+  - name: codeclimate_post
+    service: dm4sea
+    command: cc-test-reporter after-build

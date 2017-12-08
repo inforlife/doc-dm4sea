@@ -3,7 +3,8 @@ RSpec.describe VariableData do
                                               batch: 'LOT1',
                                               dataprod: Date.new(2017,11,18),
                                               datascaden: Date.new(2020,11,18),
-                                              qt_teorica: 0.334) }
+                                              qt_teorica: 0.334,
+                                              numero_po: '001234567890') }
   let(:cgmp_table_class)  { class_spy('CGMPRecord').as_stubbed_const }
   let(:cgmp_table)        { spy('cGMP table') }
   let(:item_formula)      { spy('item formula', codice_mp: '43-000000', legame: 100) }
@@ -15,7 +16,7 @@ RSpec.describe VariableData do
 
   context '#to_s' do
     it 'returns its attributes as string' do
-      expect(VariableData.new(cgmp_batch).to_s).to eq('%93%12-000000%10%LOT1%11%18/11/2017%17%18/11/2020%37%34')
+      expect(VariableData.new(cgmp_batch).to_s).to eq('%93%12-000000%10%LOT1%11%18/11/2017%17%18/11/2020%37%34%400%001234567890')
     end
   end
 

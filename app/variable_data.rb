@@ -4,7 +4,8 @@ class VariableData
                     { name: 'batch_code',         ai: 10, value: cgmp_batch.batch },
                     { name: 'manufacturing_date', ai: 11, value: cgmp_batch.dataprod.strftime('%d/%m/%Y') },
                     { name: 'expiration_date',    ai: 17, value: cgmp_batch.datascaden.strftime('%d/%m/%Y') },
-                    { name: 'sellable_units',     ai: 37, value: get_sellable_units(cgmp_batch) } ]
+                    { name: 'sellable_units',     ai: 37, value: get_sellable_units(cgmp_batch) },
+                    { name: 'po_number',          ai: 400, value: cgmp_batch.numero_po } ]
   end
 
   def to_s

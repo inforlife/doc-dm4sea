@@ -2,7 +2,7 @@ class EmailDataMatrix
   def self.after_batch_record_print
     last_batch = CGMPRecord.new('LOTTI').last
 
-    if NewProductionOrderCheck.call(last_batch) && NotYetStoredCheck.call(last_batch)
+    if NewProductionOrderCheck.call(last_batch) && BagCheck.call(last_batch) && NotYetStoredCheck.call(last_batch)
       DatabaseRecord.new(batch: last_batch.batch, fdl: false).save
     else
       DatabaseRecord.where(fdl: false).each do |record|

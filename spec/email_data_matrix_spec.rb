@@ -15,21 +15,37 @@ RSpec.describe EmailDataMatrix do
   end
 
   context '::after_batch_record_print' do
-    let(:new_production_order_check_class)  { class_spy('NewProductionOrderCheck').as_stubbed_const }
-    let(:not_yet_stored_check_class)        { class_spy('NotYetStoredCheck').as_stubbed_const }
-    let(:cgmp_record)                       { spy('cGMP record', batch: 'LOT1') }
+    let(:new_production_order_check_class) { class_spy('NewProductionOrderCheck').as_stubbed_const }
+    let(:bag_check_class)                  { class_spy('BagCheck').as_stubbed_const }
+    let(:not_yet_stored_check_class)       { class_spy('NotYetStoredCheck').as_stubbed_const }
+    let(:cgmp_record)                      { spy('cGMP record', batch: 'LOT1') }
 
     before do
+      allow(new_production_order_check_class).to receive(:call) { true }
+      allow(not_yet_stored_check_class).to receive(:call)       { true }
+      allow(bag_check_class).to receive(:call)                  { true }
+      allow(database_record_class).to receive(:new)             { database_record }
       allow(cgmp_table).to receive(:last) { cgmp_record }
     end
 
-    context 'when the modification to LOTTI is the addition of a new production order not processed yet' do
-      before do
-        allow(new_production_order_check_class).to receive(:call) { true }
-        allow(not_yet_stored_check_class).to receive(:call)       { true }
-        allow(database_record_class).to receive(:new)             { database_record }
+    context 'it checks' do
+      it 'a new production order has been created' do
+        EmailDataMatrix.after_batch_record_print
+        expect(new_production_order_check_class).to have_received(:call).with(cgmp_record)
       end
 
+      it 'the production order is for a lot of bags' do
+        EmailDataMatrix.after_batch_record_print
+        expect(bag_check_class).to have_received(:call).with(cgmp_record)
+      end
+
+      it 'the production order has not been stored yet' do
+        EmailDataMatrix.after_batch_record_print
+        expect(not_yet_stored_check_class).to have_received(:call).with(cgmp_record)
+      end
+    end
+
+    context 'when the modification to LOTTI is the addition of a new bag production order not processed yet' do
       it 'adds the batch to database with fdl set to false' do
         EmailDataMatrix.after_batch_record_print
         expect(database_record_class).to have_received(:new).with(batch: 'LOT1', fdl: false)
@@ -43,7 +59,7 @@ RSpec.describe EmailDataMatrix do
       end
 
       context 'and a batch record has been printed for a batch which previously did not have the batch record printed' do
-        let(:cgmp_record)           { spy('cGMP record', fdl: true) }
+        let(:cgmp_record) { spy('cGMP record', fdl: true) }
 
         before do
           allow(database_record_class).to receive(:where)           { [database_record] }

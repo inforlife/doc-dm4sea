@@ -1,7 +1,13 @@
 RSpec.describe BagCheck do
   context '::call' do
-    it 'returns false when record has codeprod starting with 53' do
+    it 'returns false when record has codeprod starting with 53-' do
       cgmp_batch_0 = spy('cGMP batch', codeprod: '53-xxxxxx')
+
+      expect(BagCheck.call(cgmp_batch_0)).to eq(false)
+    end
+
+    it 'returns false when record has codeprod starting with 56-' do
+      cgmp_batch_0 = spy('cGMP batch', codeprod: '56-xxxxxx')
 
       expect(BagCheck.call(cgmp_batch_0)).to eq(false)
     end

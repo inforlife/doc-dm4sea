@@ -39,7 +39,7 @@ RSpec.describe EmailDataMatrix do
         expect(bag_check_class).to have_received(:call).with(cgmp_record)
       end
 
-      it 'the prodcution order has not been stored yet' do
+      it 'the production order has not been stored yet' do
         EmailDataMatrix.after_batch_record_print
         expect(not_yet_stored_check_class).to have_received(:call).with(cgmp_record)
       end

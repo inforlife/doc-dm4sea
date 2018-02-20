@@ -33,8 +33,8 @@ RSpec.describe EmailDataMatrix do
         EmailDataMatrix.after_batch_record_print
         expect(new_production_order_check_class).to have_received(:call).with(cgmp_record)
       end
-      it 'the production order is for a lot of bags' do
 
+      it 'the production order is for a lot of bags' do
         EmailDataMatrix.after_batch_record_print
         expect(bag_check_class).to have_received(:call).with(cgmp_record)
       end
@@ -59,7 +59,11 @@ RSpec.describe EmailDataMatrix do
       end
 
       context 'and a batch record has been printed for a batch which previously did not have the batch record printed' do
+<<<<<<< HEAD
         let(:cgmp_record) { spy('cGMP record', prt_fdl: true) }
+=======
+        let(:cgmp_record) { spy('cGMP record', fdl: true) }
+>>>>>>> origin/fix-database-insert
 
         before do
           allow(database_record_class).to receive(:where)           { [database_record] }

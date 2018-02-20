@@ -2,7 +2,7 @@ RSpec.describe EmailDataMatrix do
   let(:cgmp_table_class)      { class_spy('CGMPRecord').as_stubbed_const }
   let(:cgmp_table)            { spy('cGMP table') }
   let(:database_record_class) { class_spy('DatabaseRecord').as_stubbed_const }
-  let(:database_record)       { spy('database record', code: 'LOT2') }
+  let(:database_record)       { spy('database record', batch: 'LOT2') }
   let(:log_action_class)      { class_spy('LogAction').as_stubbed_const }
   let(:log_action)            { spy('email file') }
   let(:email_file_class)      { class_spy('EmailFile').as_stubbed_const }

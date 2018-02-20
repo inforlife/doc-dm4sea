@@ -43,7 +43,7 @@ RSpec.describe EmailDataMatrix do
       end
 
       context 'and a batch record has been printed for a batch which previously did not have the batch record printed' do
-        let(:cgmp_record)           { spy('cGMP record', fdl: true) }
+        let(:cgmp_record) { spy('cGMP record', prt_fdl: true) }
 
         before do
           allow(database_record_class).to receive(:where)           { [database_record] }

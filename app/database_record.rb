@@ -13,7 +13,7 @@ class DatabaseRecord
 
   def save
     @updated_at = @created_at = Time.now
-    DB.execute "INSERT INTO batches VALUES ( ?, ?, ?, ? )", [batch, BooleanValue[fdl], created_at.to_s, updated_at.to_s]
+    DB.execute "INSERT INTO batches VALUES ('#{batch}', #{BooleanValue[fdl]}, '#{created_at}', '#{updated_at}')"
     self
   end
 

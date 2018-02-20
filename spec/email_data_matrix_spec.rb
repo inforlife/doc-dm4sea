@@ -25,7 +25,7 @@ RSpec.describe EmailDataMatrix do
       allow(not_yet_stored_check_class).to receive(:call)       { true }
       allow(bag_check_class).to receive(:call)                  { true }
       allow(database_record_class).to receive(:new)             { database_record }
-      allow(cgmp_table).to receive(:last) { cgmp_record }
+      allow(cgmp_table).to receive(:last)                       { cgmp_record }
     end
 
     context 'it checks' do

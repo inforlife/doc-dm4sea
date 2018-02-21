@@ -13,7 +13,7 @@ RSpec.describe DatabaseRecord do
   context '#save' do
     it 'inserts the recod into the database' do
       database_record.save
-      expect(database).to have_received(:execute).with('INSERT INTO batches VALUES ( ?, ?, ?, ? )', ['LOT1', 1, time.now, time.now])
+      expect(database).to have_received(:execute).with("INSERT INTO batches VALUES ('LOT1', 1, '#{time.now}', '#{time.now}')")
     end
 
     it 'returns self' do

@@ -2,7 +2,7 @@ RSpec.describe EmailDataMatrix do
   let(:cgmp_table_class)      { class_spy('CGMPRecord').as_stubbed_const }
   let(:cgmp_table)            { spy('cGMP table') }
   let(:database_record_class) { class_spy('DatabaseRecord').as_stubbed_const }
-  let(:database_record)       { spy('database record', code: 'LOT2') }
+  let(:database_record)       { spy('database record', batch: 'LOT2') }
   let(:log_action_class)      { class_spy('LogAction').as_stubbed_const }
   let(:log_action)            { spy('email file') }
   let(:email_file_class)      { class_spy('EmailFile').as_stubbed_const }
@@ -25,7 +25,7 @@ RSpec.describe EmailDataMatrix do
       allow(not_yet_stored_check_class).to receive(:call)       { true }
       allow(bag_check_class).to receive(:call)                  { true }
       allow(database_record_class).to receive(:new)             { database_record }
-      allow(cgmp_table).to receive(:last) { cgmp_record }
+      allow(cgmp_table).to receive(:last)                       { cgmp_record }
     end
 
     context 'it checks' do
@@ -33,8 +33,8 @@ RSpec.describe EmailDataMatrix do
         EmailDataMatrix.after_batch_record_print
         expect(new_production_order_check_class).to have_received(:call).with(cgmp_record)
       end
-
       it 'the production order is for a lot of bags' do
+
         EmailDataMatrix.after_batch_record_print
         expect(bag_check_class).to have_received(:call).with(cgmp_record)
       end
@@ -59,7 +59,7 @@ RSpec.describe EmailDataMatrix do
       end
 
       context 'and a batch record has been printed for a batch which previously did not have the batch record printed' do
-        let(:cgmp_record) { spy('cGMP record', fdl: true) }
+        let(:cgmp_record) { spy('cGMP record', prt_fdl: true) }
 
         before do
           allow(database_record_class).to receive(:where)           { [database_record] }

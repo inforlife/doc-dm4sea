@@ -7,6 +7,8 @@ images/*png
 pdfs/*.pdf
 log/*.log
 
+*.orig
+
 RELEASE
 
 coverage

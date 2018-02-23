@@ -13,7 +13,9 @@ RUN apk update && \
     apk upgrade && \
     apk --no-cache add tzdata git bash wget yaml openssl-dev readline-dev build-base linux-headers && \
     apk --no-cache add sqlite sqlite-libs sqlite-dev && \
-    apk --no-cache add supervisor  && \
+    apk --no-cache add supervisor && \
+    apk --no-cache add nodejs-npm && \
+    npm install -g bwip-js && \
     ls /usr/share/zoneinfo && \
     cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime && \
     echo $TIMEZONE >  /etc/timezone && \

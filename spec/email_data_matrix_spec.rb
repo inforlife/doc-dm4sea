@@ -9,6 +9,7 @@ RSpec.describe EmailDataMatrix do
   let(:email_file)            { spy('email file') }
   let(:data_matrix_pdf_class) { class_spy('DataMatrixPdf').as_stubbed_const }
   let(:data_matrix_pdf)       { spy('datamatrix pdf') }
+  let(:variable_data_class)   { class_spy('VariableData').as_stubbed_const }
 
   before do
     allow(cgmp_table_class).to receive(:new) { cgmp_table }
@@ -18,30 +19,29 @@ RSpec.describe EmailDataMatrix do
     let(:new_production_order_check_class) { class_spy('NewProductionOrderCheck').as_stubbed_const }
     let(:bag_check_class)                  { class_spy('BagCheck').as_stubbed_const }
     let(:not_yet_stored_check_class)       { class_spy('NotYetStoredCheck').as_stubbed_const }
-    let(:cgmp_record)                      { spy('cGMP record', batch: 'LOT1') }
+    let(:last_cgmp_record)                 { spy('Last cGMP record', batch: 'LOT1') }
 
     before do
       allow(new_production_order_check_class).to receive(:call) { true }
       allow(not_yet_stored_check_class).to receive(:call)       { true }
       allow(bag_check_class).to receive(:call)                  { true }
       allow(database_record_class).to receive(:new)             { database_record }
-      allow(cgmp_table).to receive(:last)                       { cgmp_record }
+      allow(cgmp_table).to receive(:last)                       { last_cgmp_record }
     end
 
     context 'it checks' do
       it 'a new production order has been created' do
         EmailDataMatrix.after_batch_record_print
-        expect(new_production_order_check_class).to have_received(:call).with(cgmp_record)
+        expect(new_production_order_check_class).to have_received(:call).with(last_cgmp_record)
       end
       it 'the production order is for a lot of bags' do
-
         EmailDataMatrix.after_batch_record_print
-        expect(bag_check_class).to have_received(:call).with(cgmp_record)
+        expect(bag_check_class).to have_received(:call).with(last_cgmp_record)
       end
 
       it 'the production order has not been stored yet' do
         EmailDataMatrix.after_batch_record_print
-        expect(not_yet_stored_check_class).to have_received(:call).with(cgmp_record)
+        expect(not_yet_stored_check_class).to have_received(:call).with(last_cgmp_record)
       end
     end
 
@@ -67,11 +67,13 @@ RSpec.describe EmailDataMatrix do
           allow(data_matrix_pdf_class).to receive(:new)             { data_matrix_pdf }
         end
 
-        it 'generates the datamatrix' do
-          allow(email_file_class).to receive(:new) { email_file }
+        it 'generates the datamatrix for the batch' do
+          allow(email_file_class).to receive(:new)    { email_file }
+          allow(variable_data_class).to receive(:new)
 
           EmailDataMatrix.after_batch_record_print
           expect(data_matrix_pdf).to have_received(:save)
+          expect(variable_data_class).to have_received(:new).with(cgmp_record)
         end
 
         it 'emails the datamatrix' do

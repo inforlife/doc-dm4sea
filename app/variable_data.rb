@@ -19,10 +19,10 @@ class VariableData
 private
 
   def get_sellable_units(batch_code)
-    records = CGMPRecord.new('IMP_PROD').where(batch_pf: batch_code)
-    records.select    { |record| /\A43-\w+\Z/ =~ record.codice_mp }
-           .group_by  { |record| record.codice_mp }
-           .map       { |_, records| records.map(&:qta_reale).reduce(0, :+) }
-           .max
+    prod = CGMPRecord.new('IMP_PROD').where(batch_pf: batch_code)
+    prod.select    { |record| /\A43-\w+\Z/ =~ record.codice_mp }
+        .group_by  { |record| record.codice_mp }
+        .map       { |_, records| records.map(&:qta_reale).reduce(0, :+) }
+        .max
   end
 end

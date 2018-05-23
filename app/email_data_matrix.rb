@@ -14,8 +14,7 @@ class EmailDataMatrix
     batch = CGMPRecord.new('LOTTI').first(batch: batch_code)
     generate_and_email_datamatrix_for(batch)
 
-    record = DatabaseRecord.where(batch: batch_code).first
-    record.update(fdl: true)
+   DatabaseRecord.new(batch: batch_code, fdl: true).save if DatabaseRecord.where(batch: batch_code).empty?
   end
 
 private

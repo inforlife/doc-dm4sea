@@ -48,15 +48,14 @@ RSpec.describe EmailDataMatrix do
       before do
         allow(cgmp_table).to receive(:where)                { [cgmp_record] }
         allow(data_matrix_pdf_class).to receive(:new)       { data_matrix_pdf }
+        allow(database_record_class).to receive(:new)       { database_record }
         allow(not_yet_stored_check_class).to receive(:call) { true }
         allow(bag_check_class).to receive(:call)            { true }
-
         allow(variable_data_class).to receive(:new)
-        allow(database_record_class).to receive(:new)       { database_record }
       end
 
       it 'generates the datamatrix for the batch' do
-         allow(email_file_class).to receive(:new)    { email_file }
+        allow(email_file_class).to receive(:new)    { email_file }
 
         EmailDataMatrix.for_batch_records_printed_today
         expect(data_matrix_pdf).to have_received(:save)
@@ -88,47 +87,62 @@ RSpec.describe EmailDataMatrix do
   end
 
   context '::for_batch' do
-    let(:cgmp_record) { spy('cGMP record', batch: 'LOT3') }
+    let(:cgmp_record) { spy('cGMP record', batch: 'LOT2') }
 
     before do
       allow(database_record_class).to receive(:where)           { [database_record] }
-      allow(cgmp_table).to receive(:first).with(batch: 'LOT3')  { cgmp_record }
+      allow(cgmp_table).to receive(:first).with(batch: 'LOT2')  { cgmp_record }
       allow(data_matrix_pdf_class).to receive(:new)             { data_matrix_pdf }
+      allow(database_record_class).to receive(:new)             { database_record }
     end
 
     it 'finds the provided batch' do
       allow(email_file_class).to receive(:new) { email_file }
 
-      EmailDataMatrix.for_batch('LOT3')
-      expect(cgmp_table).to have_received(:first).with(batch: 'LOT3')
+      EmailDataMatrix.for_batch('LOT2')
+      expect(cgmp_table).to have_received(:first).with(batch: 'LOT2')
     end
 
     it 'generates the datamatrix' do
       allow(email_file_class).to receive(:new) { email_file }
 
-      EmailDataMatrix.for_batch('LOT3')
+      EmailDataMatrix.for_batch('LOT2')
       expect(data_matrix_pdf).to have_received(:save)
     end
 
     it 'emails the datamatrix' do
       allow(email_file_class).to receive(:new) { email_file }
 
-      EmailDataMatrix.for_batch('LOT3')
+      EmailDataMatrix.for_batch('LOT2')
       expect(email_file).to have_received(:deliver)
     end
 
     it 'logs the email send' do
       allow(log_action_class).to receive(:new) { log_action }
 
-      EmailDataMatrix.for_batch('LOT3')
+      EmailDataMatrix.for_batch('LOT2')
       expect(log_action).to have_received(:deliver)
     end
 
-    it 'updates the batch setting fdl to true' do
-      allow(email_file_class).to receive(:new) { email_file }
+    context 'when the datamatix has been previusly generated for the batch' do
+      it 'does not add the batch to database' do
+        allow(email_file_class).to receive(:new)        { email_file }
+        allow(database_record_class).to receive(:where) { [database_record] }
 
-      EmailDataMatrix.for_batch('LOT3')
-      expect(database_record).to have_received(:update).with(fdl: true)
+        EmailDataMatrix.for_batch('LOT2')
+        expect(database_record_class).to_not have_received(:new)
+      end
+    end
+
+    context 'when the datamatix has not been previusly generated for the batch' do
+      it 'adds the batch to database' do
+        allow(email_file_class).to receive(:new)        { email_file }
+        allow(database_record_class).to receive(:where) { [] }
+
+        EmailDataMatrix.for_batch('LOT2')
+        expect(database_record_class).to have_received(:new).with(batch: cgmp_record.batch, fdl: true)
+        expect(database_record).to have_received(:save)
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 class EmailDataMatrix
   def self.for_batch_records_printed_today
-    records  = CGMPRecord.new('LOTTI').where(stato: '0', prt_fdl: true)
+    records = CGMPRecord.new('LOTTI').where(stato: '0', prt_fdl: true)
 
     records.each do |cgmp_record|
       if BagCheck.call(cgmp_record) && NotYetStoredCheck.call(cgmp_record)
@@ -14,7 +14,7 @@ class EmailDataMatrix
     batch = CGMPRecord.new('LOTTI').first(batch: batch_code)
     generate_and_email_datamatrix_for(batch)
 
-   DatabaseRecord.new(batch: batch_code, fdl: true).save if DatabaseRecord.where(batch: batch_code).empty?
+    DatabaseRecord.new(batch: batch_code, fdl: true).save if DatabaseRecord.where(batch: batch_code).empty?
   end
 
 private

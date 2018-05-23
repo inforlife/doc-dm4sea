@@ -3,10 +3,6 @@ class CGMPRecord
     @table = DBF::Table.new("#{ENV['CGMP_PATH']}/#{file_name}.DBF")
   end
 
-  def last
-    @table.find(:all).last
-  end
-
   def first(args)
     @table.find(:first, args)
   end

@@ -22,23 +22,6 @@ RSpec.describe DatabaseRecord do
     end
   end
 
-  context '#update' do
-    it 'sets the fdl value' do
-      database_record.update(fdl: false)
-      expect(database).to have_received(:execute).with(/UPDATE batches SET fdl = 0[\w\s=,'+:-]+WHERE batch = 'LOT1'/)
-    end
-
-    it 'sets updated_at' do
-        database_record.update(fdl: false)
-        expect(database).to have_received(:execute).with(/UPDATE batches [\w\s=,'+:-]+updated_at = 'now' WHERE batch = 'LOT1'/)
-    end
-
-    it 'returns self' do
-      record = database_record
-      expect(record.update(fdl: false)).to eq(record)
-    end
-  end
-
   context '::where' do
     it 'fetches the records from the database' do
       DatabaseRecord.where(batch: 'LOT1', fdl: true)

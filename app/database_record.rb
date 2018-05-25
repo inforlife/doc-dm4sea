@@ -17,13 +17,6 @@ class DatabaseRecord
     self
   end
 
-  def update(fdl:)
-    @fdl = fdl
-    @updated_at = Time.now
-    DB.execute "UPDATE batches SET fdl = #{BooleanValue[fdl]}, updated_at = '#{updated_at}' WHERE batch = '#{batch}'"
-    self
-  end
-
   def self.where(attributes)
     where_clause = attributes.map do |key, value|
       if value.class == String

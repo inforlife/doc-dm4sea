@@ -1,17 +1,11 @@
 class EmailDataMatrix
-  def self.after_batch_record_print
-    last_batch = CGMPRecord.new('LOTTI').last
+  def self.for_batch_records_printed_today
+    records = CGMPRecord.new('LOTTI').where(stato: '0', prt_fdl: true)
 
-    if NewProductionOrderCheck.call(last_batch) && BagCheck.call(last_batch) && NotYetStoredCheck.call(last_batch)
-      DatabaseRecord.new(batch: last_batch.batch, fdl: false).save
-    else
-      DatabaseRecord.where(fdl: false).each do |record|
-        # CGMPRecord.new('LOTTI').first(batch: record.batch) MAY RETURN NIL IF RECORD DELATED IN CGMP
-        cgmp_record = CGMPRecord.new('LOTTI').first(batch: record.batch)
-        next unless cgmp_record.prt_fdl
+    records.each do |cgmp_record|
+      if BagCheck.call(cgmp_record) && NotYetStoredCheck.call(cgmp_record)
         generate_and_email_datamatrix_for(cgmp_record)
-        record.update(fdl: true)
-        break
+        DatabaseRecord.new(batch: cgmp_record.batch, fdl: true).save
       end
     end
   end
@@ -20,8 +14,7 @@ class EmailDataMatrix
     batch = CGMPRecord.new('LOTTI').first(batch: batch_code)
     generate_and_email_datamatrix_for(batch)
 
-    record = DatabaseRecord.where(batch: batch_code).first
-    record.update(fdl: true)
+    DatabaseRecord.new(batch: batch_code, fdl: true).save if DatabaseRecord.where(batch: batch_code).empty?
   end
 
 private

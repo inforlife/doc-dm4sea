@@ -8,16 +8,6 @@ RSpec.describe CGMPRecord do
     ENV['CGMP_PATH'] = "#{App.root}/spec/fixtures"
   end
 
-  context '#last' do
-    it 'returns the last record in the file' do
-      record = CGMPRecord.new('DUMMY').last
-
-      expect(record.codeprod).to eq('10-000003')
-      expect(record.batch).to eq('LOT3')
-      expect(record.prt_fdl).to eq( true)
-    end
-  end
-
   context '#first' do
     it 'returns the first record in the file with matching attributes' do
       record = CGMPRecord.new('DUMMY').first(prt_fdl: true)

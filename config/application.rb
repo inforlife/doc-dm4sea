@@ -1,4 +1,5 @@
 require 'bundler'
+require 'logger'
 require 'open3'
 
 class App
@@ -18,11 +19,9 @@ end
 Bundler.require(:default, App.env)
 
 require_relative "environments/#{App.env}"
-require_relative "../app/listen_to_file_modification"
 require_relative "../app/email_data_matrix"
 require_relative "../app/cgmp_record"
 require_relative "../app/database_record"
-require_relative "../app/new_production_order_check"
 require_relative "../app/bag_check"
 require_relative "../app/not_yet_stored_check"
 require_relative "../app/variable_data"

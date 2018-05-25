@@ -4,7 +4,7 @@ class VariableData
                     { name: 'batch_code',         ai: 10, value: cgmp_batch.batch },
                     { name: 'manufacturing_date', ai: 11, value: cgmp_batch.dataprod.strftime('%d/%m/%Y') },
                     { name: 'expiration_date',    ai: 17, value: cgmp_batch.datascaden.strftime('%d/%m/%Y') },
-                    { name: 'sellable_units',     ai: 37, value: get_sellable_units(cgmp_batch) },
+                    { name: 'sellable_units',     ai: 37, value: get_sellable_units(cgmp_batch.batch) },
                     { name: 'po_number',          ai: 400, value: cgmp_batch.numero_po } ]
   end
 
@@ -18,12 +18,11 @@ class VariableData
 
 private
 
-  def get_sellable_units(cgmp_batch)
-    (standard_sellable_units(cgmp_batch) * cgmp_batch.qt_teorica).ceil
-  end
-
-  def standard_sellable_units(cgmp_batch)
-    formula = CGMPRecord.new('LEGAMI').where(codeprod: cgmp_batch.codeprod, metodopro: cgmp_batch.metodopro)
-    formula.select { |item| /\A43-\w+\Z/ =~ item.codice_mp }.max_by(&:legame).legame
+  def get_sellable_units(batch_code)
+    prod = CGMPRecord.new('IMP_PROD').where(batch_pf: batch_code)
+    prod.select    { |record| /\A43-\w+\Z/ =~ record.codice_mp }
+        .group_by  { |record| record.codice_mp }
+        .map       { |_, records| records.map(&:qta_reale).reduce(0, :+) }
+        .max
   end
 end

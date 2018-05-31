@@ -19,7 +19,6 @@ RUN apk update && \
     ls /usr/share/zoneinfo && \
     cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime && \
     echo $TIMEZONE >  /etc/timezone && \
-    apk del tzdata && \
     rm -rf /var/cache/apk/* && \
     git clone https://github.com/sstephenson/ruby-build.git && \
     cd ruby-build && \

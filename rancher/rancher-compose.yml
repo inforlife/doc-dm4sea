@@ -1,7 +1,0 @@
-version: '2'
-
-services:
-  dm4sea:
-    scale: 1
-    labels:
-      io.rancher.scheduler.affinity:host_label: app=dm4sea

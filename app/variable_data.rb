@@ -23,6 +23,6 @@ private
     prod.select    { |record| /\A43-\w+\Z/ =~ record.codice_mp }
         .group_by  { |record| record.codice_mp }
         .map       { |_, records| records.map(&:qta_reale).reduce(0, :+) }
-        .max
+        .max.ceil
   end
 end
